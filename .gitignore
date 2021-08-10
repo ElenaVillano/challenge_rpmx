@@ -130,6 +130,6 @@ dmypy.json
 
 # Data
 
-data/*
+#data/*
 .idea/
 tmp/*

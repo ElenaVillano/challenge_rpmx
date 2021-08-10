@@ -148,10 +148,12 @@ Instalas los requirements:
  `pip install -r requirements.txt`.
  
  
- Y corres la siguiente línea para ver las variables seleccionadas y los resultados del modelo:
+ Te colocas en la raíz del repo y corres la siguiente línea para ver las variables seleccionadas y los resultados del modelo:
  
  `python deteccion_fraude.py`
  
  
+ 
+ _____
  
  
