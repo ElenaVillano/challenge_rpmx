@@ -90,6 +90,10 @@ En los siguientes dos gráficos se presenta un scatterplot con las variables mon
 ![](notebooks/images/im7.png)
    
 ![](notebooks/images/im8.png)
+
+#### Hora y fecha
+
+![](notebooks/images/im10.png)
  
  
  ## Feature selección 
