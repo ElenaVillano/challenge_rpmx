@@ -1,14 +1,14 @@
 from setuptools import setup
 
 setup(
-    name="detecion_fraudes",
+    name="myhello",
     version='0.1',
-    py_modules=['cli'],
+    py_modules=['hello'],
     install_requires=[
         'Click',
     ],
     entry_points='''
         [console_scripts]
-        detecion_fraudes=cli:main
+        myhello=hello:cli
     ''',
 )
