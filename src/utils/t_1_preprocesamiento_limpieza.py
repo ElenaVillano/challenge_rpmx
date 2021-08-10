@@ -1,19 +1,17 @@
-# Usefull functions
-
 import pandas as pd
-import numpy as np
-import datetime, time
+from src.utils.utils import convierte_a_minusculas
 
-def preprocesamiento_limpieza(data):
+
+def limpieza(data):
     """
     Preprocesamiento y limpieza de datos
-    :param df: dataframe
+    :param data: dataframe
     :return: dataframe en minúsculas
     ==========
     Ejemplo:
         >> dataframe = preprocesamiento_limpieza(dataframe)
     """
-
+    data = convierte_a_minusculas(data)
     data = data.rename(columns={'ID_USER': 'id_user'})
     data['fecha'] = pd.to_datetime(data['fecha'])
     data['fraude'] = data['fraude'].apply(lambda x: 1 if x == True else 0)
@@ -24,4 +22,3 @@ def preprocesamiento_limpieza(data):
     data['ciudad'] = data['ciudad'].fillna('NA_ciudad')
 
     return data
-

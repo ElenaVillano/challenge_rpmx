@@ -1,4 +1,6 @@
 # Usefull functions
+import joblib
+
 
 def convierte_a_minusculas(df):
     """
@@ -14,3 +16,6 @@ def convierte_a_minusculas(df):
 
     return df
 
+
+def save_df(df, path):
+    joblib.dump(df, path)
