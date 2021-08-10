@@ -75,5 +75,11 @@ Se obtuvo la correlación entre las variables numéricas de la base y se observ�
 
 fdsalh
 
- ![](notebooks/images/im5.png)
+![](notebooks/images/im5.png)
+![](notebooks/images/im6.png)
+![](notebooks/images/im7.png)
+   
+![](notebooks/images/im8.png)
+    
+![](notebooks/images/im9.png)
  
