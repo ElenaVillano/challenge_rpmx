@@ -3,7 +3,7 @@ from src.utils.utils import convierte_a_minusculas
 from src.utils.utils import save_df
 
 
-def limpieza(data):
+def preprocesamiento_limpieza(data):
     """
     Preprocesamiento y limpieza de datos
     :param data: dataframe
