@@ -19,3 +19,8 @@ def convierte_a_minusculas(df):
 
 def save_df(data, path):
     joblib.dump(data, path)
+
+
+def load_df(path):
+    data = joblib.load(path)
+    return data
