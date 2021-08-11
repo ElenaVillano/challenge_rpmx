@@ -46,15 +46,6 @@ def modelado(data):
     return model
 
 
-
-
-    #with open()
-
-
-    #filename = 'tmp/selected_model.sav'
-    #pickle.dump(model, open(filename, 'wb'))
-    #selected_model = model_selection(models, X_test, y_test, self.fecha)
-
     #y_pred = model.predict(X_test)
 
     # score = model.score(X_test, y_test)
