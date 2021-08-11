@@ -8,7 +8,7 @@ from sklearn.compose import ColumnTransformer
 
 
 def one_hot_scaler(data):
-    load_df('tmp/df_1_limpio.pkl')
+
     standard_scaler = StandardScaler()
 
     transformers = [('one_hot',
@@ -75,7 +75,4 @@ def horas_dias_ciclo(data):
 def feature_engineering(data):
     final_df = one_hot_scaler(data)
     final_df = horas_dias_ciclo(final_df)
-
-    save_df(final_df, 'tmp/df_2_feature_engineering.pkl')
-
     return final_df
