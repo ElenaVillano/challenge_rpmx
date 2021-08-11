@@ -22,7 +22,7 @@ def undersampling(data):
     return df_undersampled
 
 
-def train_test(data):
+def modelado(data):
     df = data
 
     print(df.columns)
@@ -37,13 +37,16 @@ def train_test(data):
                                                         stratify=y,
                                                         random_state=12)
 
-    #print(X.shape, X_train.shape, X_test.shape)
-
     model = LogisticRegression()
+
+    print(model)
 
     model.fit(X_train, y_train)
 
     return model
+
+
+
 
     #with open()
 

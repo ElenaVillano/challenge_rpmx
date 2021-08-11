@@ -15,17 +15,14 @@ class modeling(luigi.Task):
     def run(self):
         df = load_df('tmp/df_2_feature_' + str(self.fecha) + ".pkl")
         # df = undersampling(df)
-        model = modeling(df)
+        model = modelado(df)
 
-        Pkl_Filename = "tmp/selected_model.pkl"
 
-        with open(Pkl_Filename, 'wb') as file:
-            pickle.dump(model, file)
 
 
         #save_df(y_pred, 'tmp/modelado_y_pred' + str(self.fecha) + ".pkl")
         #save_df(y_test, 'tmp/modelado_y_test' + str(self.fecha) + ".pkl")
-        #save_df(y_pred, 'tmp/selected_model.pkl')
+        save_df(model, 'tmp/selected_model.pkl')
 
     def output(self):
         return luigi.local_target.LocalTarget('tmp/selected_model.pkl')
