@@ -23,6 +23,4 @@ def preprocesamiento_limpieza(data):
     data['establecimiento'] = data['establecimiento'].fillna('NA_establecimiento')
     data['ciudad'] = data['ciudad'].fillna('NA_ciudad')
 
-    save_df(data, 'tmp/df_1_limpio.pkl')
-
     return data
