@@ -14,12 +14,11 @@ def one_hot_scaler(data):
     transformers = [('one_hot',
                      OneHotEncoder(sparse=False,
                                    categories="auto"),
-                     ['tipo_tc', 'is_prime', 'genero',
-                      'establecimiento', 'ciudad']),
+                     ['tipo_tc', 'genero',
+                      'establecimiento']),
                     ('standar_scaler',
                      standard_scaler,
-                     ['monto', 'dcto', 'cashback',
-                      'linea_tc', 'interes_tc'
+                     ['monto', 'dcto', 'cashback'
                       ])]
 
     col_trans = ColumnTransformer(transformers, remainder="drop",
@@ -29,18 +28,14 @@ def one_hot_scaler(data):
     df_transformed = df_regressors.transform(data)
 
     a = [sorted(data.tipo_tc.unique()),
-         sorted(data.is_prime.unique()),
          sorted(data.genero.unique()),
-         sorted(data.establecimiento.unique()),
-         sorted(data.ciudad.unique())]
+         sorted(data.establecimiento.unique())]
 
     colnames = sum(a, [])
 
     colnames.append('monto')
     colnames.append('dcto')
     colnames.append('cashback')
-    colnames.append('linea_tc')
-    colnames.append('interes_tc')
 
     final_df = pd.DataFrame(df_transformed, columns=colnames)
 
@@ -75,4 +70,5 @@ def horas_dias_ciclo(data):
 def feature_engineering(data):
     final_df = one_hot_scaler(data)
     final_df = horas_dias_ciclo(final_df)
+    #print(final_df.columns)
     return final_df

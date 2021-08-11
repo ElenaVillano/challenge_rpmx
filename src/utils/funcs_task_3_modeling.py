@@ -1,16 +1,13 @@
 import pandas as pd
-import numpy as np
+import pickle
 
-
-from src.utils.utils import save_df, load_df
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_score, accuracy_score, recall_score
 from sklearn.linear_model import LogisticRegression
 
 
-def undersampling():
-    df = load_df('tmp/df_2_feature_engineering.pkl')
-    df = df.drop(['no_prime', 'si_prime'], 1)
+def undersampling(data):
+    df = data.drop(['no_prime', 'si_prime'], 1)
 
     df_no_fraude = df[df['fraude'] == 0]
     df_si_fraude = df[df['fraude'] == 1]
@@ -25,9 +22,13 @@ def undersampling():
     return df_undersampled
 
 
-def modeling(data):
-    X = data.drop(columns=['fraude'], axis=1).values
-    y = data['fraude']
+def train_test(data):
+    df = data
+
+    print(df.columns)
+
+    X = df.drop(columns=['fraude'], axis=1).values
+    y = df['fraude']
 
     print(X.shape, y.shape)
 
@@ -36,21 +37,32 @@ def modeling(data):
                                                         stratify=y,
                                                         random_state=12)
 
-    print(X.shape, X_train.shape, X_test.shape)
+    #print(X.shape, X_train.shape, X_test.shape)
 
-    model = LogisticRegression().fit(X_train, y_train)
+    model = LogisticRegression()
 
-    y_pred = model.predict(X_test)
+    model.fit(X_train, y_train)
 
-    score = model.score(X_test, y_test)
+    return model
 
-    print('Score modelo:', score)
-
-    return y_pred, y_test
+    #with open()
 
 
-def metricas(y_pred,y_test):
+    #filename = 'tmp/selected_model.sav'
+    #pickle.dump(model, open(filename, 'wb'))
+    #selected_model = model_selection(models, X_test, y_test, self.fecha)
 
+    #y_pred = model.predict(X_test)
+
+    # score = model.score(X_test, y_test)
+
+    # print('Score modelo:', score)
+
+    #return y_pred, y_test, model
+    #return y_pred
+
+
+def metricas(y_pred, y_test):
     data_precision_score = precision_score(y_test, y_pred)
 
     data_accuracy_score = accuracy_score(y_test, y_pred)
@@ -60,13 +72,3 @@ def metricas(y_pred,y_test):
     print('precision score:', data_precision_score)
     print('recall score:', data_recall_score)
     print('accuracy score:', data_accuracy_score)
-
-
-
-
-
-
-
-
-
-
