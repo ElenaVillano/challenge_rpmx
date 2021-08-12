@@ -30,15 +30,5 @@ class prediction(luigi.Task):
 
         print('¡hola', precision, recall, accuracy)
 
-        #prediccionfraude
-
-
-
-
-
-
-
-
-
 
 
