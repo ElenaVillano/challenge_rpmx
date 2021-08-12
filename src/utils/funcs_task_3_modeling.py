@@ -2,7 +2,6 @@ import pandas as pd
 import pickle
 
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import precision_score, accuracy_score, recall_score
 from sklearn.linear_model import LogisticRegression
 
 
@@ -46,23 +45,7 @@ def modelado(data):
     return model
 
 
-    #y_pred = model.predict(X_test)
-
-    # score = model.score(X_test, y_test)
-
-    # print('Score modelo:', score)
-
-    #return y_pred, y_test, model
-    #return y_pred
 
 
-def metricas(y_pred, y_test):
-    data_precision_score = precision_score(y_test, y_pred)
 
-    data_accuracy_score = accuracy_score(y_test, y_pred)
 
-    data_recall_score = recall_score(y_test, y_pred)
-
-    print('precision score:', data_precision_score)
-    print('recall score:', data_recall_score)
-    print('accuracy score:', data_accuracy_score)
