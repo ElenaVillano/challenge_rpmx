@@ -1,13 +1,10 @@
-import luigi
 import yaml
 from luigi.contrib.postgres import CopyToTable
-from src.utils.utils import save_df, load_df
-from src.pipeline.task_3_modeling import modeling
-from src.pipeline.task_2_feature import featureengineering
-from src.utils.funcs_task_4_prediccion import *
-from src.utils.funcs_task_2_feature import *
+import psycopg2
+from src.pipeline.task_4_prediccion import *
 
-class prediction(luigi.Task):
+
+class almacenamientoapi(CopyToTable):
     # Parametros
     fecha = luigi.Parameter()
 
@@ -20,9 +17,36 @@ class prediction(luigi.Task):
     database = credentials['dbname']
     host = credentials['host']
     port = credentials['port']
-    table = ''
+    table = 'predicciones'
+
+    columns = [("col_1", "VARCHAR"),
+               ("col_2", "VARCHAR")]
 
     def requires(self):
-        yield featureengineering(self.fecha)
+        return prediction(self.fecha)
 
-        yield modeling(self.fecha)
+    def rows(self):
+
+        z = str(2+ 3)
+        #print("########### ", z)
+        r = [("test 1", z), ("test 2","45")]
+        for element in r:
+            yield element
+
+    #def rows(self):
+        #y_test = load_df('tmp/y_test_' + str(self.fecha) + ".pkl")
+        #y_pred = load_df('tmp/y_pred_' + str(self.fecha) + ".pkl")
+
+        #y_predicciones = pd.DataFrame(y_test)
+        #y_predicciones.columns = ['y_test']
+        #y_predicciones['y_pred'] = pd.DataFrame(y_pred)
+
+        #records = y_predicciones.to_records(index=False)
+        #results = list(records)
+
+       # results = [('hola',
+       #            'funciona')]
+
+       # for element in results:
+        #    yield element
+

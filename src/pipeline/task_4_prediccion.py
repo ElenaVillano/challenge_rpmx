@@ -26,9 +26,9 @@ class prediction(luigi.Task):
 
         metricas_all = metricas(y_pred, y_test)
 
-        save_df(X_test, 'tmp/X_test' + str(self.fecha) + ".pkl")
-        save_df(y_test, 'tmp/y_test' + str(self.fecha) + ".pkl")
-        save_df(y_pred, 'tmp/y_pred' + str(self.fecha) + ".pkl")
+        save_df(X_test, 'tmp/X_test_' + str(self.fecha) + ".pkl")
+        save_df(y_test, 'tmp/y_test_' + str(self.fecha) + ".pkl")
+        save_df(y_pred, 'tmp/y_pred_' + str(self.fecha) + ".pkl")
         save_df(metricas_all, 'tmp/metricas_all_' + str(self.fecha) + ".pkl")
 
     def output(self):
