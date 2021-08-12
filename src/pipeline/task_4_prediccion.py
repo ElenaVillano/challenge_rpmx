@@ -1,6 +1,5 @@
 import luigi
 
-from src.utils.utils import save_df, load_df
 from src.pipeline.task_3_modeling import modeling
 from src.pipeline.task_2_feature import featureengineering
 from src.utils.funcs_task_4_prediccion import *
@@ -26,9 +25,19 @@ class prediction(luigi.Task):
 
         y_pred, score = predicciones(modelo, X_test, y_test)
 
-        precision, recall, accuracy = metricas(y_pred, y_test)
+        metricas_all = metricas(y_pred, y_test)
 
-        print('¡hola', precision, recall, accuracy)
+        save_df(X_test, 'tmp/X_test' + str(self.fecha) + ".pkl")
+        save_df(y_test, 'tmp/y_test' + str(self.fecha) + ".pkl")
+        save_df(y_pred, 'tmp/y_pred' + str(self.fecha) + ".pkl")
+        save_df(metricas_all, 'tmp/metricas_all' + str(self.fecha) + ".pkl")
+
+    def output(self):
+        return luigi.local_target.LocalTarget('tmp/y_pred' + str(self.fecha) + ".pkl")
+
+
+
+
 
 
 
