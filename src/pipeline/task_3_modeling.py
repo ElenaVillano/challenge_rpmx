@@ -17,7 +17,7 @@ class modeling(luigi.Task):
 
         model = modelado(df)
 
-        save_df(model, 'tmp/selected_model.pkl')
+        save_df(model, 'model/selected_model.pkl')
 
     def output(self):
-        return luigi.local_target.LocalTarget('tmp/selected_model.pkl')
+        return luigi.local_target.LocalTarget('model/selected_model.pkl')

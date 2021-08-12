@@ -14,11 +14,10 @@ class prediction(luigi.Task):
 
         yield modeling(self.fecha)
 
-    def rows(self):
+    def run(self):
         df = load_df('tmp/df_2_feature_' + str(self.fecha) + ".pkl")
-        df = feature_engineering(df)
 
-        modelo = load_df('tmp/selected_model.pkl')
+        modelo = load_df('model/selected_model.pkl')
 
         X_test = df.drop(columns=['fraude'], axis=1).values
         y_test = df['fraude']
@@ -30,10 +29,10 @@ class prediction(luigi.Task):
         save_df(X_test, 'tmp/X_test' + str(self.fecha) + ".pkl")
         save_df(y_test, 'tmp/y_test' + str(self.fecha) + ".pkl")
         save_df(y_pred, 'tmp/y_pred' + str(self.fecha) + ".pkl")
-        save_df(metricas_all, 'tmp/metricas_all' + str(self.fecha) + ".pkl")
+        save_df(metricas_all, 'tmp/metricas_all_' + str(self.fecha) + ".pkl")
 
     def output(self):
-        return luigi.local_target.LocalTarget('tmp/y_pred' + str(self.fecha) + ".pkl")
+        return luigi.local_target.LocalTarget('tmp/y_test' + str(self.fecha) + ".pkl")
 
 
 
