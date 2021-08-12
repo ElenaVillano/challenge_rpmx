@@ -32,7 +32,7 @@ class prediction(luigi.Task):
         save_df(metricas_all, 'tmp/metricas_all_' + str(self.fecha) + ".pkl")
 
     def output(self):
-        return luigi.local_target.LocalTarget('tmp/y_test' + str(self.fecha) + ".pkl")
+        return luigi.local_target.LocalTarget('tmp/y_test_' + str(self.fecha) + ".pkl")
 
 
 

@@ -1,6 +1,6 @@
 import yaml
 from luigi.contrib.postgres import CopyToTable
-import psycopg2
+import psycopg2 as pg
 from src.pipeline.task_4_prediccion import *
 
 
@@ -30,6 +30,7 @@ class almacenamientoapi(CopyToTable):
         z = str(2+ 3)
         #print("########### ", z)
         r = [("test 1", z), ("test 2","45")]
+
         for element in r:
             yield element
 
