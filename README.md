@@ -107,52 +107,161 @@ Por último, apesar de que las variables temporales, no presentaron patrones cla
  
  ## Datos no balanceados
  
-Tanto para la selección de variables como para el modelamiento  se realizó un submuestreo de las transacciones que no tenían fraude. Este procedimiento es una recomendación para realizar análisis de operaciones fraudulentas, pues debido a que se tiene cantidad de etiquetas muy diferente, los resultados en el modelamiento pueden estar sesgados (ver `referencias/*.pdf`).
+Tanto para la selección de variables como para el modelamiento  se realizó un submuestreo de las transacciones que no tenían fraude. Este procedimiento es una recomendación para realizar análisis de operaciones fraudulentas, pues debido a que se tiene cantidad de etiquetas muy diferente, los resultados en el modelamiento pueden estar sesgados (ver `referencias/*.pdf`). 
  
  ## Modelamiento y métricas
  
-Se eligió un modelo de regresión logística como algoritmo para hacer las predicciones y su desempeño fue el siguiente: 
-
- 
-- score modelo: 0.459
-- precision score: 0.462.
-- recall score: 0.5.
-- accuracy score: 0.459.
-
- 
-Como se observa las métricas son muy deficientes, por lo que hacer una predicción sobre este modelo no sería adecuado.
+Se eligió un modelo de regresión logística como algoritmo para hacer las predicciones y su desempeño en general fue muy deficiente en cuanto a las métricas de precision, recall y accuracy. 
 
 Se asume se obtuvieron estos resultados debido al trabajo de submuestreo, pues se cuentan con muy pocos datos. Además, las variables de linea_tc, interes_tc, las transformaciones cíclicas de hora y día, a pesar de haber salido como importantes en la selección de variables, consideraría que necesitan análisis adicionales pues sus distribuciones son muy uniformes. 
 
-## Para correr el modelamiento
+# Model deployment
 
-Clona el repo
+Para este proceso se asume que se obtuvo un buen modelo que predice bien los datos de fraude. El modelo elegido se encuentra en la carpeta de `model/selected_model.pkl`. Dicho modelo  se calibró con toda la base de datos, por lo que sus métricas son mucho mejores, pero están sesgadas.  Adicionalmente, se hizo una base de datos adicional para tomarla como test de que funciona bien el producto de datos. 
+
+
+
+### Para correr este proyecto sigue las siguientes instrucciones. 
+
+- Clona el repo
 
 `git clone https://github.com/ElenaVillano/challenge_rpmx.git`
 
-Actualiza el pip install
+- Actualiza el pip install
 
  `pip install --upgrade pip`
- 
 
-- Puedes crear tu ambiente ([aquí una guía de instalación para pyenv](https://github.com/pyenv/pyenv)), y activar tu pyenv:
+- Crea ([aquí una guía de instalación para pyenv](https://github.com/pyenv/pyenv)), y activa tu pyenv:
 
 ```
-pyenv virtualenv 3.7.4 dpa_equipo_10
-pyenv activate dpa_equipo_10
-pip install -r requirements.txt
+pyenv virtualenv 3.7.4 det_fraudes
+pyenv activate det_fraudes
 ```
 
-Instalas los requirements:
+- Instala los requirements:
 
  `pip install -r requirements.txt`.
+
  
+### 1. Base de datos RDS.
  
- Te colocas en la raíz del repo y corres la siguiente línea para ver las variables seleccionadas y los resultados del modelo:
+- Este producto tiene una base de datos de acceso público, por lo que sólo necesitas crear un archivo `conf/local/credentials.yaml` que tenga las credenciales, esto lo puedes hacer con las siguientes líneas de código:
+
+```
+mkdir conf/local
+touch conf/local/credentials.yaml
+nano conf/local/credentials.yaml
+```
  
- `python deteccion_fraude.py`
+dentro de este archivo, coloca la información de la base de la siguiente manera:
  
+```
+---
+db:
+  user: postgres
+  password: prediccionfraude
+  dbname: postgres
+  host: fraudedbtres.cmz4apd9rrhn.us-east-1.rds.amazonaws.com
+  port: 5432
+
+```
  
+*Ojo: generalmente estas llaves y/o claves son privadas, pero para observar el funcionamiento de manera más fácil se colocarán aquí para que puedas correr el pipeline completo en tu computadora.*
+
+- Para acceder a la RDS debes asegurarte de tener instalado `psql` en tu computadora, en caso de no tenerlo puedes instalarlo con las siguientes líneas de código:
+
+
+```
+sudo apt-get update
+sudo apt-get install postgresql-client
+```
+
+- Para acceder de manera más rápida a la base desde tu terminal puedes colocar en un archivo `.pg_service.conf` la información de la base de la siguiente manera: 
+
+```
+cd
+nano .pg_service.conf
+```
+
+dentro de este archivo, colocar la siguiente estructura,
+
+```
+[fraude]
+user=postgres
+password=prediccionfraude
+host=fraudedbtres.cmz4apd9rrhn.us-east-1.rds.amazonaws.com
+port=5432
+dbname=postgres
+
+```
+
+y para acceder sólo colocas en la terminal:
+
+```
+psql service=fraude
+```
+
+### 2. Para orquestar las tareas del presente pipeline, se utilizó Luigi. 
+
+Para correrlo en tu computadora, asegúrate de:
+
+- Tener tu pyen activado: `pyenv activate det_fraudes`
+- Asegurarte que tienes los requerimientos `pip install -r requirements.txt`
+- Y colocarte en la raíz del repo.
+
+Para prender luigi esa misma terminal corre las siguientes líneas:
+
+```
+export PYTHONPATH=$PWD
+luigid --port 8082
+```
+
+En otra terminal, igual activa tu pyenv y colócate en la raíz del repo, y corre la siguiente línea:
+
+```
+PYTHONPATH="." luigi --module src.pipeline.task_5_api  almacenamientoapi --fecha '2021-01-30'
+```
+
+y para ver el dag de luigi, coloca en tu buscador: `http://localhost:8082`.
+
+Debes poder ver algo así:
+
+![](notebooks/images/luigi.png)
+
+Para este caso, la única fecha que tenemos *nuevos* datos es del 2020-01-30, este parámetros se cambiaría dependiendo de la fecha en la que se hace la ingesta de nueva información, sin embargo, se pueden agregar otros parámetros que identifiquen operaciones de fraude en mayor frecuencia. 
+
+
+### 3. Para la producción del modelo se utilizó Flask.
+
+Para ver las predicciones del modelo en tu local abre una terminal:
+
+- Colócate en el siguiente path con: `cd challenge_rpmx/src/utils`.
+- Allí avísale a flask que lo correrás con: `export FLASK_APP=flask_db.py`.
+- Luego corre flask: `flask run`.
+
+Y en un buscador colocar: `http://127.0.0.1:9992/`.
+
+Dentro del flask, coloca la fecha de 2020-01-30, ejecútala, y podrás ver las predicciones que se tienen para esa *nueva* base de datos. 
+
+Debes poder ver algo así: 
+
+![](notebooks/images/flask1.png)
+![](notebooks/images/flask2.png)
+
+### 4. Para el monitoreo de datos se utilizó Dash. 
+
+Para este paso, abre otra terminal:
+
+- Colócate en el siguiente path con: `cd challenge_rpmx/src/utils`.
+- Corre la siguiente línea: `python dashboard.py`.
+
+Y en un buscador colocar `http://127.0.0.1:9993/`.
+
+Debes poder ver algo así:
+
+![](notebooks/images/dash.png)
+ 
+ #
  
  _____
  
