@@ -11,33 +11,60 @@ def load_df(path):
     data = joblib.load(path)
     return data
 
-#with open('../../conf/local/credentials.yaml', 'r') as f:
-#    config = yaml.safe_load(f)
+with open('../../conf/local/credentials.yaml', 'r') as f:
+    config = yaml.safe_load(f)
 
-#credentials = config['db']
-#user = credentials['user']
-#password = credentials['password']
-#database = credentials['dbname']
-#host = credentials['host']
-#port = credentials['port']
+credentials = config['db']
+user = credentials['user']
+password = credentials['password']
+database = credentials['dbname']
+host = credentials['host']
+port = credentials['port']
 
-#connection = pg.connect(database=database,
-#                        user=user,
-#                        password=password,
-#                        host=host,
-#                        port=port)
+connection = pg.connect(database=database,
+                        user=user,
+                        password=password,
+                        host=host,
+                        port=port)
 
-#df = pd.read_sql('select * from predicciones;', connection)
-#print(df)
-# df['date'] = pd.to_datetime(df['date'])
+df_nueva = pd.read_sql('select * from cleandata;', connection)
+df_entrenamiento = pd.read_sql('select * from datosentrenamiento;', connection)
 
-df=load_df('tmp/df_1_limpio_' + str(self.fecha) + ".pkl")
+df_nueva['base'] = 'base_nueva'
+df_entrenamiento['base'] = 'base_entrenamiento'
+
+df_entrenamiento = df_entrenamiento.sample(frac=0.3)
+
+df = pd.concat([df_entrenamiento,df_nueva], axis=0)
 
 app = dash.Dash(__name__)
 
-app.layout = html.Div([
-    html.H1("Distribucion y_true"),
-    dcc.Graph(id='my-graph', figure=px.scatter(data_frame=df, x='cashback',y='monto'))])
+app.layout = html.Div(children=[
+    html.Div([
+    html.H2("Conteos de fraude"),
+    dcc.Graph(id='my-graph',
+              figure=px.histogram(
+                  data_frame=df, x='fraude',
+                  color='base'
+              )),
+        ]),
+    html.Div([
+        html.H2("Cashback (x) vs monto (y)"),
+        dcc.Graph(id='my-graph2',
+                  figure=px.scatter(
+                      data_frame=df, x='cashback', y='monto',
+                      color='base'
+                  )),
+    ]),
+    html.Div([
+        html.H2("Conteos de establecimiento"),
+        dcc.Graph(id='my-graph3',
+                  figure=px.histogram(
+                      data_frame=df, x='establecimiento',
+                      color='base'
+                  )),
+    ]),
+])
 
 if __name__ == '__main__':
     app.run_server()
