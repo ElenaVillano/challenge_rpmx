@@ -107,7 +107,7 @@ Por último, apesar de que las variables temporales, no presentaron patrones cla
  
  ## Datos no balanceados
  
-Tanto para la selección de variables como para el modelamiento  se realizó un submuestreo de las transacciones que no tenían fraude. Este procedimiento es una recomendación para realizar análisis de operaciones fraudulentas, pues debido a que se tiene cantidad de etiquetas muy diferente, los resultados en el modelamiento pueden estar sesgados (ver `referencias/*.pdf`).
+Tanto para la selección de variables como para el modelamiento  se realizó un submuestreo de las transacciones que no tenían fraude. Este procedimiento es una recomendación para realizar análisis de operaciones fraudulentas, pues debido a que se tiene cantidad de etiquetas muy diferente, los resultados en el modelamiento pueden estar sesgados (ver `referencias/*.pdf`). 
  
  ## Modelamiento y métricas
  
@@ -117,7 +117,7 @@ Se asume se obtuvieron estos resultados debido al trabajo de submuestreo, pues s
 
 # Model deployment
 
-Para este proceso se asume que se obtuvo un buen modelo que predice bien los datos de fraude. El modelo elegido se encuentra en la carpeta de `model/selected_model.pkl`. Adicionalmente, se hizo una base de datos adicional para tomarla como test de que funciona bien el producto de datos. 
+Para este proceso se asume que se obtuvo un buen modelo que predice bien los datos de fraude. El modelo elegido se encuentra en la carpeta de `model/selected_model.pkl`. Dicho modelo  se calibró con toda la base de datos, por lo que sus métricas son mucho mejores, pero están sesgadas.  Adicionalmente, se hizo una base de datos adicional para tomarla como test de que funciona bien el producto de datos. 
 
 
 
@@ -143,7 +143,7 @@ pyenv activate det_fraudes
  `pip install -r requirements.txt`.
 
  
- 1. Base de datos RDS.
+### 1. Base de datos RDS.
  
 - Este producto tiene una base de datos de acceso público, por lo que sólo necesitas crear un archivo `conf/local/credentials.yaml` que tenga las credenciales, esto lo puedes hacer con las siguientes líneas de código:
 
@@ -153,7 +153,7 @@ touch conf/local/credentials.yaml
 nano conf/local/credentials.yaml
 ```
  
-dentro de este archivo, coloca la llave de la db con la siguiente información:
+dentro de este archivo, coloca la información de la base de la siguiente manera:
  
 ```
 ---
@@ -176,14 +176,14 @@ sudo apt-get update
 sudo apt-get install postgresql-client
 ```
 
-Para acceder de manera más rápida a la base desde tu terminal puedes colocar en un archivo .pg_service la información de la base:
+- Para acceder de manera más rápida a la base desde tu terminal puedes colocar en un archivo `.pg_service.conf` la información de la base de la siguiente manera: 
 
 ```
 cd
 nano .pg_service.conf
 ```
 
-dentro de este archivo, colocar la siguiente estructura:
+dentro de este archivo, colocar la siguiente estructura,
 
 ```
 [fraude]
@@ -201,19 +201,22 @@ y para acceder sólo colocas en la terminal:
 psql service=fraude
 ```
 
-2. Para orquestar las tareas se utilizó el programa de Luigi. 
+### 2. Para orquestar las tareas del presente pipeline, se utilizó Luigi. 
 
-Para llevar a cabo el presente pipeline se utilizó la herramienta de Luigi y para correrlo asegúrate de lo siguiente. 
+Para correrlo en tu computadora, asegúrate de:
 
-En una terminal
+- Tener tu pyen activado: `pyenv activate det_fraudes`
+- Asegurarte que tienes los requerimientos `pip install -r requirements.txt`
+- Y colocarte en la raíz del repo.
 
-1. Tener tu pyen activado: pyenv activate det_fraudes
-2. Asegurarte que tienes los requerimientos `pip install -r requirements.txt`
-3. Colocarte en la raíz del repo.
-4. Correr la línea: `export PYTHONPATH=$PWD`
-5. Prender luigi con `luigid --port 8082`
+Para prender luigi esa misma terminal corre las siguientes líneas:
 
-En otra terminal, igual activa tu pyenv, y corre la siguiente línea:
+```
+export PYTHONPATH=$PWD
+luigid --port 8082
+```
+
+En otra terminal, igual activa tu pyenv y colócate en la raíz del repo, y corre la siguiente línea:
 
 ```
 PYTHONPATH="." luigi --module src.pipeline.task_5_api  almacenamientoapi --fecha '2021-01-30'
@@ -221,29 +224,44 @@ PYTHONPATH="." luigi --module src.pipeline.task_5_api  almacenamientoapi --fecha
 
 y para ver el dag de luigi, coloca en tu buscador: `http://localhost:8082`.
 
-Para este caso, la única fecha que tenemos *nuevos* datos es del 2021-01-30, este parámetros se cambiaría dependiendo de la fecha en la que se hace la ingesta de nueva información, sin embargo, se pueden agregar otros parámetros que identifiquen operaciones de fraude en mayor frecuencia. 
+Debes poder ver algo así:
+
+![](notebooks/images/luigi.png)
+
+Para este caso, la única fecha que tenemos *nuevos* datos es del 2020-01-30, este parámetros se cambiaría dependiendo de la fecha en la que se hace la ingesta de nueva información, sin embargo, se pueden agregar otros parámetros que identifiquen operaciones de fraude en mayor frecuencia. 
 
 
-3. Para la producción del modelo se utilizó Flask.
+### 3. Para la producción del modelo se utilizó Flask.
 
-Para ver las predicciones del modelo, utilizamos Flask, para que tu lo puedas correr en tu local abre una terminal:
+Para ver las predicciones del modelo en tu local abre una terminal:
 
-- Colócate en el siguiente path con: `cd Inspections_dpa/src/utils`.
+- Colócate en el siguiente path con: `cd challenge_rpmx/src/utils`.
 - Allí avísale a flask que lo correrás con: `export FLASK_APP=flask_db.py`.
 - Luego corre flask: `flask run`.
 
 Y en un buscador colocar: `http://127.0.0.1:9992/`.
 
-4. Para el monitoreo de datos se utilizó Dash. 
+Dentro del flask, coloca la fecha de 2020-01-30, ejecútala, y podrás ver las predicciones que se tienen para esa *nueva* base de datos. 
 
-Para el monitoreo con Dash, abre otra terminal:
+Debes poder ver algo así: 
 
-- Colócate en el siguiente path con: `cd Inspections_dpa/src/utils`.
+![](notebooks/images/flask1.png)
+![](notebooks/images/flask2.png)
+
+### 4. Para el monitoreo de datos se utilizó Dash. 
+
+Para este paso, abre otra terminal:
+
+- Colócate en el siguiente path con: `cd challenge_rpmx/src/utils`.
 - Corre la siguiente línea: `python dashboard.py`.
 
 Y en un buscador colocar `http://127.0.0.1:9993/`.
+
+Debes poder ver algo así:
+
+![](notebooks/images/dash.png)
  
- 
+ #
  
  _____
  
