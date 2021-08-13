@@ -23,4 +23,14 @@ def preprocesamiento_limpieza(data):
     data['establecimiento'] = data['establecimiento'].fillna('NA_establecimiento')
     data['ciudad'] = data['ciudad'].fillna('NA_ciudad')
 
+    data = data.drop(['last_order',
+                      'dispositivo',
+                      'linea_tc',
+                      'interes_tc',
+                      'ciudad',
+                      'status_txn',
+                      'is_prime'], 1)
+
+
+
     return data

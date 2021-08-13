@@ -1,11 +1,11 @@
-,ID_USER,genero,monto,fecha,hora,dispositivo,establecimiento,ciudad,tipo_tc,linea_tc,interes_tc,status_txn,is_prime,dcto,cashback,fraude
-522,88,M,426.94390196855056,2020-01-30,3,"{'model': 2020, 'device_score': 5, 'os': 'ANDROID'}",Abarrotes,,Física,72000,49,Rechazada,False,0.0,4.269439019685506,False
-20084,2956,M,751.8060030300708,2020-01-30,23,"{'model': 2020, 'device_score': 5, 'os': 'WEB'}",Super,Merida,Física,36000,36,Aceptada,False,0.0,7.518060030300708,False
-26134,3873,M,801.3265333760452,2020-01-30,1,"{'model': 2020, 'device_score': 4, 'os': 'WEB'}",Restaurante,,Física,33000,62,Aceptada,True,0.0,8.013265333760453,False
-20086,2956,M,449.93488500106406,2020-01-30,20,"{'model': 2020, 'device_score': 3, 'os': 'ANDROID'}",Farmacia,Merida,Física,36000,36,Aceptada,False,89.98697700021282,3.599479080008513,False
-16232,2397,F,259.08458598102425,2020-01-30,6,"{'model': 2020, 'device_score': 1, 'os': '%%'}",,Merida,Virtual,43000,45,En proceso,False,0.0,5.181691719620485,False
-2465,360,F,91.7737196047329,2020-01-30,20,"{'model': 2020, 'device_score': 4, 'os': 'WEB'}",Restaurante,Toluca,Virtual,68000,41,Aceptada,True,9.177371960473293,1.6519269528851923,False
-10574,1582,--,600.4812782111381,2020-01-30,3,"{'model': 2020, 'device_score': 4, 'os': '%%'}",Farmacia,Toluca,Virtual,70000,55,En proceso,False,0.0,12.009625564222764,False
-3936,600,F,891.6726082816147,2020-01-30,3,"{'model': 2020, 'device_score': 3, 'os': 'WEB'}",MPago,Merida,Virtual,33000,63,Aceptada,False,0.0,17.833452165632295,False
-1104,182,F,415.25171133605664,2020-01-30,12,"{'model': 2020, 'device_score': 5, 'os': '%%'}",,Monterrey,Física,64000,58,En proceso,False,0.0,4.152517113360567,False
-8473,1278,M,121.63352196423016,2020-01-30,16,"{'model': 2020, 'device_score': 5, 'os': '.'}",MPago,Toluca,Física,26000,63,Aceptada,False,0.0,1.2163352196423016,True
+order_txn,last_order,ID_USER,genero,monto,fecha,hora,dispositivo,establecimiento,ciudad,tipo_tc,linea_tc,interes_tc,status_txn,is_prime,dcto,cashback,fraude
+26965,522,88,M,426.94390196855056,2020-01-30,3,"{'model': 2020, 'device_score': 5, 'os': 'ANDROID'}",Abarrotes,,Física,72000,49,Rechazada,False,0.0,4.269439019685506,False
+26966,20084,2956,M,751.8060030300708,2020-01-30,23,"{'model': 2020, 'device_score': 5, 'os': 'WEB'}",Super,Merida,Física,36000,36,Aceptada,False,0.0,7.518060030300708,False
+26967,26134,3873,M,801.3265333760452,2020-01-30,1,"{'model': 2020, 'device_score': 4, 'os': 'WEB'}",Restaurante,,Física,33000,62,Aceptada,True,0.0,8.013265333760453,False
+26968,20086,2956,M,449.93488500106406,2020-01-30,20,"{'model': 2020, 'device_score': 3, 'os': 'ANDROID'}",Farmacia,Merida,Física,36000,36,Aceptada,False,89.98697700021282,3.599479080008513,False
+26969,16232,2397,F,259.08458598102425,2020-01-30,6,"{'model': 2020, 'device_score': 1, 'os': '%%'}",,Merida,Virtual,43000,45,En proceso,False,0.0,5.181691719620485,False
+26970,2465,360,F,91.7737196047329,2020-01-30,20,"{'model': 2020, 'device_score': 4, 'os': 'WEB'}",Restaurante,Toluca,Virtual,68000,41,Aceptada,True,9.177371960473293,1.6519269528851923,False
+26971,10574,1582,--,600.4812782111381,2020-01-30,3,"{'model': 2020, 'device_score': 4, 'os': '%%'}",Farmacia,Toluca,Virtual,70000,55,En proceso,False,0.0,12.009625564222764,False
+26972,3936,600,F,891.6726082816147,2020-01-30,3,"{'model': 2020, 'device_score': 3, 'os': 'WEB'}",MPago,Merida,Virtual,33000,63,Aceptada,False,0.0,17.833452165632295,False
+26973,1104,182,F,415.25171133605664,2020-01-30,12,"{'model': 2020, 'device_score': 5, 'os': '%%'}",,Monterrey,Física,64000,58,En proceso,False,0.0,4.152517113360567,False
+26974,8473,1278,M,121.63352196423016,2020-01-30,16,"{'model': 2020, 'device_score': 5, 'os': '.'}",MPago,Toluca,Física,26000,63,Aceptada,False,0.0,1.2163352196423016,True

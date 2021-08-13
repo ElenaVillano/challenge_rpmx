@@ -1,6 +1,6 @@
 import luigi
 
-from src.pipeline.task_1_preprocesamiento import preprocesamiento
+from src.pipeline.task_1_preprocesamiento_rds import dbcleanrds
 from src.utils.funcs_task_2_feature import *
 
 
@@ -9,7 +9,7 @@ class featureengineering(luigi.Task):
     fecha = luigi.Parameter()
 
     def requires(self):
-        return preprocesamiento(self.fecha)
+        return dbcleanrds(self.fecha)
 
     def run(self):
 
