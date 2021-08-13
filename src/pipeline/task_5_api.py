@@ -19,27 +19,22 @@ class almacenamientoapi(CopyToTable):
     port = credentials['port']
     table = 'predicciones'
 
-    columns = [("y_test", "VARCHAR"),
-               ("y_pred", "VARCHAR")]
+    columns = [("y_test", "INTEGER"),
+               ("y_pred", "INTEGER"),
+               ("id_user", "INTEGER")]
 
     def requires(self):
         return prediction(self.fecha)
 
     def rows(self):
-
-        #z = str(2+ 3)
-        #print("########### ", z)
-        #r = [("test 1", z), ("test 2","45")]
-
-        #for element in r:
-        #    yield element
-
         y_test = load_df('tmp/y_test_' + str(self.fecha) + ".pkl")
         y_pred = load_df('tmp/y_pred_' + str(self.fecha) + ".pkl")
+        df = load_df('tmp/df_1_limpio_' + str(self.fecha) + ".pkl")
 
         y_predicciones = pd.DataFrame(y_test)
         y_predicciones.columns = ['y_test']
         y_predicciones['y_pred'] = pd.DataFrame(y_pred)
+        y_predicciones['id_user'] = df['id_user']
 
         records = y_predicciones.to_records(index=False)
         results = list(records)
