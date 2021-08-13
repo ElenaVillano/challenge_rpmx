@@ -12,7 +12,7 @@ def preprocesamiento_limpieza(data):
     Ejemplo:
         >> dataframe = preprocesamiento_limpieza(dataframe)
     """
-
+    data = data.rename_axis('order_txn').reset_index()
     data = convierte_a_minusculas(data)
     data = data.rename(columns={'ID_USER': 'id_user'})
     data['fecha'] = pd.to_datetime(data['fecha'])
@@ -23,8 +23,7 @@ def preprocesamiento_limpieza(data):
     data['establecimiento'] = data['establecimiento'].fillna('NA_establecimiento')
     data['ciudad'] = data['ciudad'].fillna('NA_ciudad')
 
-    data = data.drop(['last_order',
-                      'dispositivo',
+    data = data.drop(['dispositivo',
                       'linea_tc',
                       'interes_tc',
                       'ciudad',
