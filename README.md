@@ -234,7 +234,7 @@ luigid --port 8082
 En otra terminal, igual activa tu pyenv y colócate en la raíz del repo, y corre la siguiente línea:
 
 ```
-PYTHONPATH="." luigi --module src.pipeline.task_5_api  almacenamientoapi --fecha '2021-01-30'
+PYTHONPATH="." luigi --module src.pipeline.task_5_api  almacenamientoapi --fecha '2020-01-30'
 ```
 
 y para ver el dag de luigi, coloca en tu buscador: `http://localhost:8082`.
