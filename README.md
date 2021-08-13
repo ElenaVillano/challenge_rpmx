@@ -122,15 +122,19 @@ Para este proceso se asume que se obtuvo un buen modelo que predice bien los dat
 #### Descripción de pipeline:
 
 1. Se utilizó una base de datos RDS, pública.
-2. Se utilizó luigi como orquestador de tareas que son las siguientes:
-   - preprocesamiento, datos depositados en local.
-   - preprocesamiento, datos depositados en RDS.
-   - feature engineering depositados en local.
-   - prediccion, que toma el modelo ya seleccionado y obtiene las predicciones a partir de feature engineering.
-   - subida de datos a RDS para la api de flask. 
-   - se tiene una tarea adicional llamada modelado que se utiliza cuando se quiere calibrar de nuevo el modelo. 
+2. Se utilizó luigi como orquestador de tareas (colocadas en ruta `src/pipepile`) que son las siguientes:
+   - task 1: preprocesamiento, datos depositados en local.
+   - task 1 rds: preprocesamiento, datos depositados en RDS.
+   - task 2: feature engineering depositados en local.
+   - task 4: prediccion, que toma el modelo ya seleccionado y obtiene las predicciones a partir de feature engineering.
+   - task 5: subida de datos a RDS para la api de flask. 
+   - task 3: se tiene esta tarea llamada modeling que se utiliza cuando se quiere calibrar de nuevo el modelo. 
 3. Se utilizó flask para la producción del modelo.
 4. Se utilizó Dash para el monitoreo. 
+
+Notas:
+
+Todas las funciones de las tareas están en la ruta `src/utils/`, así como los códigos para correr Dash y Flask. 
 
 ### Para correr este proyecto sigue las siguientes instrucciones. 
 
@@ -272,7 +276,7 @@ Debes poder ver algo así:
 
 ![](notebooks/images/dash.png)
  
- #
+
  
  _____
  
