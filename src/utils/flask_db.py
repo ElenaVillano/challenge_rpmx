@@ -28,20 +28,25 @@ class Match(db.Model):
     #__table_args__ = {'schema': 'api'}  # schema
     __tablename__ = 'predicciones'  # tabla del esquema
 
-    id_user = db.Column(db.Integer, primary_key=True)
     y_test = db.Column(db.Integer)
+    proba_fraude = db.Column(db.Float)
     y_pred = db.Column(db.Integer)
-
+    id_user = db.Column(db.Integer)
+    fecha = db.Column(db.DateTime)
+    order_txn = db.Column(db.Integer, primary_key=True)
 
 # Swagger model for mashalling outputs
 model = api.model('resultados', {
     'y_test': fields.Integer,
-    'y_pred': fields.Integer
+    'proba_fraude': fields.Float,
+    'y_pred': fields.Integer,
+    'id_user': fields.Integer,
+    'order_txn': fields.Integer
 })
 
 # Final output inspection_id: '',results: [ ]
 model_list = api.model('endpoint1_output', {
-    'id_user': fields.Integer,
+    'fecha': fields.Date,
     'resultados': fields.Nested(model)
 })
 
@@ -58,16 +63,19 @@ model_list = api.model('endpoint1_output', {
 #})
 
 
-@api.route('/endpoint1/<int:id_user>')
+@api.route('/endpoint1/<fecha>')
 class ShowMatch(Resource):
     @api.marshal_with(model_list, as_list=True)
-    def get(self, id_user):
-        match = Match.query.filter_by(id_user=id_user).all()
+    def get(self, fecha):
+        match = Match.query.filter_by(fecha=fecha).all()
         resultados = []
         for element in match:
             resultados.append({'y_test': element.y_test,
-                               'y_pred': element.y_pred})
-        return {'id_user': id_user, 'resultados': resultados}
+                               'proba_fraude': element.proba_fraude,
+                               'y_pred': element.y_pred,
+                               'id_user': element.id_user,
+                               'order_txn': element.order_txn})
+        return {'fecha': fecha, 'resultados': resultados}
 
 
 #@api.route('/endpoint2/<date>')

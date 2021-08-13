@@ -5,12 +5,13 @@ from sklearn.metrics import precision_score, accuracy_score, recall_score
 def predicciones(modelo, X_test, y_test):
 
     y_pred = modelo.predict(X_test)
+    y_proba = modelo.predict_proba(X_test)
 
     score = modelo.score(X_test, y_test)
 
     print('Score:', score)
 
-    return y_pred, score
+    return y_pred, y_proba, score
 
 
 def metricas(y_pred, y_test):

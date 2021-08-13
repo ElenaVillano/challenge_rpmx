@@ -22,12 +22,13 @@ class prediction(luigi.Task):
         X_test = df.drop(columns=['fraude'], axis=1).values
         y_test = df['fraude']
 
-        y_pred, score = predicciones(modelo, X_test, y_test)
+        y_pred, y_proba, score = predicciones(modelo, X_test, y_test)
 
         metricas_all = metricas(y_pred, y_test)
 
         save_df(X_test, 'tmp/X_test_' + str(self.fecha) + ".pkl")
         save_df(y_test, 'tmp/y_test_' + str(self.fecha) + ".pkl")
+        save_df(y_proba, 'tmp/y_proba_' + str(self.fecha) + ".pkl")
         save_df(y_pred, 'tmp/y_pred_' + str(self.fecha) + ".pkl")
         save_df(metricas_all, 'tmp/metricas_all_' + str(self.fecha) + ".pkl")
 
