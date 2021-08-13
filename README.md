@@ -136,7 +136,7 @@ Notas:
 
 Todas las funciones de las tareas están en la ruta `src/utils/`, así como los códigos para correr Dash y Flask. 
 
-### Para correr este proyecto sigue las siguientes instrucciones. 
+### Para correr este proyecto sigue las instrucciones:
 
 - Clona el repo
 
