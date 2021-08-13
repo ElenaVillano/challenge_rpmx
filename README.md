@@ -119,7 +119,18 @@ Se asume se obtuvieron estos resultados debido al trabajo de submuestreo, pues s
 
 Para este proceso se asume que se obtuvo un buen modelo que predice bien los datos de fraude. El modelo elegido se encuentra en la carpeta de `model/selected_model.pkl`. Dicho modelo  se calibró con toda la base de datos, por lo que sus métricas son mucho mejores, pero están sesgadas.  Adicionalmente, se hizo una base de datos adicional para tomarla como test de que funciona bien el producto de datos. 
 
+#### Descripción de pipeline:
 
+1. Se utilizó una base de datos RDS, pública.
+2. Se utilizó luigi como orquestador de tareas que son las siguientes:
+   - preprocesamiento, datos depositados en local.
+   - preprocesamiento, datos depositados en RDS.
+   - feature engineering depositados en local.
+   - prediccion, que toma el modelo ya seleccionado y obtiene las predicciones a partir de feature engineering.
+   - subida de datos a RDS para la api de flask. 
+   - se tiene una tarea adicional llamada modelado que se utiliza cuando se quiere calibrar de nuevo el modelo. 
+3. Se utilizó flask para la producción del modelo.
+4. Se utilizó Dash para el monitoreo. 
 
 ### Para correr este proyecto sigue las siguientes instrucciones. 
 
@@ -195,7 +206,7 @@ dbname=postgres
 
 ```
 
-y para acceder sólo colocas en la terminal:
+y para acceder a la base de datos e interacción con los datos, sólo colocas en la terminal:
 
 ```
 psql service=fraude
