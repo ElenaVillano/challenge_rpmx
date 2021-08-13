@@ -58,7 +58,7 @@ model_list = api.model('endpoint1_output', {
 #})
 
 
-@api.route('/endpoint1/<int:license_id>')
+@api.route('/endpoint1/<int:id_user>')
 class ShowMatch(Resource):
     @api.marshal_with(model_list, as_list=True)
     def get(self, id_user):
