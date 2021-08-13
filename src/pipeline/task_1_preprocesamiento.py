@@ -10,7 +10,7 @@ class preprocesamiento(luigi.Task):
     fecha = luigi.Parameter()
 
     def run(self):
-        df = pd.read_csv('data/historic_db_' + str(self.fecha) + '.csv')
+        df = pd.read_csv('data/consecutive_db_' + str(self.fecha) + '.csv')
         df = preprocesamiento_limpieza(df)
 
         save_df(df, 'tmp/df_1_limpio_' + str(self.fecha) + ".pkl")
