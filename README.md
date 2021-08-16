@@ -119,9 +119,24 @@ Se asume se obtuvieron estos resultados debido al trabajo de submuestreo, pues s
 
 Para este proceso se asume que se obtuvo un buen modelo que predice bien los datos de fraude. El modelo elegido se encuentra en la carpeta de `model/selected_model.pkl`. Dicho modelo  se calibró con toda la base de datos, por lo que sus métricas son mucho mejores, pero están sesgadas.  Adicionalmente, se hizo una base de datos adicional para tomarla como test de que funciona bien el producto de datos. 
 
+#### Descripción de pipeline:
 
+1. Se utilizó una base de datos RDS, pública.
+2. Se utilizó luigi como orquestador de tareas (colocadas en ruta `src/pipepile`) que son las siguientes:
+   - task 1: preprocesamiento, datos depositados en local.
+   - task 1 rds: preprocesamiento, datos depositados en RDS.
+   - task 2: feature engineering depositados en local.
+   - task 4: prediccion, que toma el modelo ya seleccionado y obtiene las predicciones a partir de feature engineering.
+   - task 5: subida de datos a RDS para la api de flask. 
+   - task 3: se tiene esta tarea llamada modeling que se utiliza cuando se quiere calibrar de nuevo el modelo. 
+3. Se utilizó flask para la producción del modelo.
+4. Se utilizó Dash para el monitoreo. 
 
-### Para correr este proyecto sigue las siguientes instrucciones. 
+Notas:
+
+Todas las funciones de las tareas están en la ruta `src/utils/`, así como los códigos para correr Dash y Flask. 
+
+### Para correr este proyecto sigue las instrucciones:
 
 - Clona el repo
 
@@ -195,7 +210,7 @@ dbname=postgres
 
 ```
 
-y para acceder sólo colocas en la terminal:
+y para acceder a la base de datos e interacción con los datos, sólo colocas en la terminal:
 
 ```
 psql service=fraude
@@ -219,7 +234,7 @@ luigid --port 8082
 En otra terminal, igual activa tu pyenv y colócate en la raíz del repo, y corre la siguiente línea:
 
 ```
-PYTHONPATH="." luigi --module src.pipeline.task_5_api  almacenamientoapi --fecha '2021-01-30'
+PYTHONPATH="." luigi --module src.pipeline.task_5_api  almacenamientoapi --fecha '2020-01-30'
 ```
 
 y para ver el dag de luigi, coloca en tu buscador: `http://localhost:8082`.
@@ -261,7 +276,7 @@ Debes poder ver algo así:
 
 ![](notebooks/images/dash.png)
  
- #
+
  
  _____
  
